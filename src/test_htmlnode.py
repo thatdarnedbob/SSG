@@ -1,16 +1,8 @@
 import unittest
+from htmlnode import LeafNode, ParentNode, HTMLNode
 
-from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
-
-    #def test_repr(self):
-    #    test_case_one  = HTMLNode("a", "balls out", None, {
-    #        "href": "https://www.google.com",
-    #        "target": "_blank",
-    #    })
-    #    self.assertEqual(test_case_one.props_to_html(), " href: https://www.google.com target: _blank")
-
     def test_to_html_props(self):
         node = HTMLNode(
             "div",
@@ -45,11 +37,30 @@ class TestHTMLNode(unittest.TestCase):
             None,
         )
 
-    def test_to_html_no_children(self):
+    def test_repr(self):
+        node = HTMLNode(
+            "p",
+            "What a strange world",
+            None,
+            {"class": "primary"},
+        )
+        self.assertEqual(
+            node.__repr__(),
+            "HTMLNode(p, What a strange world, children: None, {'class': 'primary'})",
+        )
+
+    def test_leaf_to_html_p(self):
         node = LeafNode("p", "Hello, world!")
         self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
 
-    def test_to_html_no_tag(self):
+    def test_leaf_to_html_a(self):
+        node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        self.assertEqual(
+            node.to_html(),
+            '<a href="https://www.google.com">Click me!</a>',
+        )
+
+    def test_leaf_to_html_no_tag(self):
         node = LeafNode(None, "Hello, world!")
         self.assertEqual(node.to_html(), "Hello, world!")
 
@@ -96,13 +107,3 @@ class TestHTMLNode(unittest.TestCase):
             node.to_html(),
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
         )
-
-    # def test_repr_leaf(self):
-    #   test_case_one  = LeafNode("a", "balls out", {
-    #        "href": "https://www.google.com",
-    #        "target": "_blank",
-    #    })
-    #    self.assertEqual(test_case_one.to_html(), "<a href: https://www.google.com target: _blank>balls out</a>")
-
-if __name__ == "__main__":
-    unittest.main()
