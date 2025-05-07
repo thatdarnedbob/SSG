@@ -236,5 +236,13 @@ class TestProcesses(unittest.TestCase):
             new_nodes,
         )
 
+    def test_text_to_nodes(self):
+        sample_text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        ressie = text_to_text_nodes(sample_text)
+        # print("[")
+        # for node in ressie:
+        #     print(f"{node},")
+        # print("]")'''
+
 if __name__ == "__main__":
     unittest.main()

@@ -26,7 +26,7 @@ def extract_markdown_images(text):
     return re.findall(r"!\[([^\]]*)\]\(([^\)]*)\)", text)
 
 def extract_markdown_links(text):
-    return re.findall(r"\[([^\]]*)\]\(([^\)]*)\)", text)
+    return re.findall(r"(?<!!)\[([^\]]*)\]\(([^\)]*)\)", text)
 
 def split_nodes_image(old_nodes):
     text_nodes = []
@@ -51,10 +51,12 @@ def split_nodes_link(old_nodes):
     text_nodes = []
 
     for node in old_nodes:
+        # print(f"{node}\n")
         workingtext = node.text
         found_links = extract_markdown_links(workingtext)
         if len(found_links) == 0:
             text_nodes.append(node)
+            workingtext = ""
         for link in found_links:
             parts = workingtext.split("[" + link[0] + "](" + link[1] + ")", maxsplit=1)
             if len(parts[0]) > 0:
@@ -65,3 +67,18 @@ def split_nodes_link(old_nodes):
             text_nodes.append(TextNode(workingtext, TextType.TEXT))
 
     return text_nodes
+
+def text_to_text_nodes(text):
+    working_nodes = [TextNode(text, TextType.TEXT)]
+    working_nodes = split_nodes_image(working_nodes)
+    # practice_nodes = split_nodes_link([TextNode("This is **text** with an _italic_ word and a `code block` and an ", TextType.TEXT, None),
+    #                                     TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+    #                                     TextNode(" and a [link](https://boot.dev)", TextType.TEXT, None)])'''
+    # print(f"\nlen of practice nodes is {len(practice_nodes)}\n")
+    working_nodes = split_nodes_link(working_nodes)
+    delimiter_pairs = [("**", TextType.BOLD),
+                       ("_", TextType.ITALIC),
+                       ("`", TextType.CODE)]
+    for pair in delimiter_pairs:
+        working_nodes = split_nodes_delimiter(working_nodes, pair[0], pair[1])
+    return working_nodes
