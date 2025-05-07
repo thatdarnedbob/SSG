@@ -6,28 +6,37 @@ from textnode import *
 
 class TestProcesses(unittest.TestCase):
     def test_split_nodes_delimiter(self):
-        print("testing single code block\n")
+        # print("testing single code block\n")
         node = TextNode("This is text with a `code block` word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        print(node)
-        print(new_nodes)
+        # print(node)
+        # print(new_nodes)
+        self.assertEqual(str(node), "TextNode(This is text with a `code block` word, text, None)")
+        self.assertEqual(str(new_nodes), "[TextNode(This is text with a , text, None), TextNode(code block, code, None), TextNode( word, text, None)]")
 
-        print("testing single bold word\n")
+        # print("testing single bold word\n")
         node = TextNode("This is text with a **bold** word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
-        print(node)
-        print(new_nodes)
+        # print(node)
+        # print(new_nodes)
+        self.assertEqual(str(node), "TextNode(This is text with a **bold** word, text, None)")
+        self.assertEqual(str(new_nodes), "[TextNode(This is text with a , text, None), TextNode(bold, bold, None), TextNode( word, text, None)]")
 
-        print("testing single italic word\n")
+        # print("testing single italic word\n")
         node = TextNode("This is text with an _italic_ word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
-        print(node)
-        print(new_nodes)
-        print("testing multiple codes inside nodes\n")
+        # print(node)
+        # print(new_nodes)
+        self.assertEqual(str(node), "TextNode(This is text with an _italic_ word, text, None)")
+        self.assertEqual(str(new_nodes), "[TextNode(This is text with an , text, None), TextNode(italic, italic, None), TextNode( word, text, None)]")
+
+        # print("testing multiple codes inside nodes\n")
         node = TextNode("This is `text` with a `code block` word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        print(node)
-        print(new_nodes)
+        # print(node)
+        # print(new_nodes)
+        self.assertEqual(str(node), "TextNode(This is `text` with a `code block` word, text, None)")
+        self.assertEqual(str(new_nodes), "[TextNode(This is , text, None), TextNode(text, code, None), TextNode( with a , text, None), TextNode(code block, code, None), TextNode( word, text, None)]")
 
     def test_delim_bold(self):
         node = TextNode("This is text with a **bolded** word", TextType.TEXT)
@@ -109,17 +118,21 @@ class TestProcesses(unittest.TestCase):
         )
     def test_extract_markdown_images(self):
         text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
-        print("actual result:")
-        print(extract_markdown_images(text))
-        print("expected result:")
-        print([("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")])
+        # print("actual result:")
+        # print(extract_markdown_images(text))
+        # print("expected result:")
+        # print([("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")])
+        self.assertEqual(str(extract_markdown_images(text)),
+                         "[('rick roll', 'https://i.imgur.com/aKaOqIh.gif'), ('obi wan', 'https://i.imgur.com/fJRm4Vk.jpeg')]")
 
     def test_extract_markdown_links(self):
         text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
-        print("actual result:")
-        print(extract_markdown_links(text))
-        print("expected result:")
-        print([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")])
+        # print("actual result:")
+        # print(extract_markdown_links(text))
+        # print("expected result:")
+        # print([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")])
+        self.assertAlmostEqual(str(extract_markdown_links(text)),
+                         "[('to boot dev', 'https://www.boot.dev'), ('to youtube', 'https://www.youtube.com/@bootdotdev')]")
 
     def test_extract_markdown_images_2(self):
         matches = extract_markdown_images(
@@ -156,9 +169,10 @@ class TestProcesses(unittest.TestCase):
             ],
             new_nodes,
         )
-        print("producing split images in nodes\n")
-        print(new_nodes)
-        print("ending output\n")
+        # print("producing split images in nodes\n")
+        # print(new_nodes)
+        self.assertEqual(str(new_nodes), "[TextNode(This is text with an , text, None), TextNode(image, image, https://i.imgur.com/zjjcJKZ.png), TextNode( and another , text, None), TextNode(second image, image, https://i.imgur.com/3elNhQu.png)]")
+        # print("ending output\n")
 
     def test_split_image(self):
         node = TextNode(
@@ -187,7 +201,7 @@ class TestProcesses(unittest.TestCase):
             new_nodes,
         )
 
-    def test_split_images(self):
+    def test_split_images_2(self):
         node = TextNode(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
             TextType.TEXT,
