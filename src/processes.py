@@ -43,7 +43,7 @@ def split_nodes_image(old_nodes):
             text_nodes.append(TextNode(image[0], TextType.IMAGE, image[1]))
             workingtext = parts[1]
         if len(workingtext) > 0:
-            text_nodes.append(TextNode[workingtext], TextType.TEXT)
+            text_nodes.append(TextNode(workingtext, TextType.TEXT))
 
     return text_nodes
 
@@ -62,6 +62,6 @@ def split_nodes_link(old_nodes):
             text_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
             workingtext = parts[1]
         if len(workingtext) > 0:
-            text_nodes.append(TextNode[workingtext], TextType.TEXT)
+            text_nodes.append(TextNode(workingtext, TextType.TEXT))
 
     return text_nodes
