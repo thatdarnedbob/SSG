@@ -82,3 +82,16 @@ def text_to_text_nodes(text):
     for pair in delimiter_pairs:
         working_nodes = split_nodes_delimiter(working_nodes, pair[0], pair[1])
     return working_nodes
+
+def markdown_to_blocks(md):
+    if md is None or md == '':
+        return ['']
+    
+    block_strings = md.split('\n\n')
+    formatted_blocks = []
+    for block in block_strings:
+        block = block.strip()
+        if len(block) > 0:
+            formatted_blocks.append(block)
+
+    return formatted_blocks
