@@ -75,7 +75,12 @@ This is the same paragraph on a new line
         )
 
     def test_is_header_block(self):
-        self.assertEqual(is_header_block("# hey you"), True)
+        res = is_header_block("# hey you")
+        self.assertEqual(res, True)
+
+        res = is_header_block(" # hey you")
+        self.assertEqual(res, False)
+
 
 if __name__ == "__main__":
     unittest.main()

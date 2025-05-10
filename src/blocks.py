@@ -14,7 +14,7 @@ def block_to_block_type(block):
 
 def is_header_block(block):
     pattern = re.compile("#{1,6} .*", flags=re.DOTALL)
-    return pattern.match(block)
+    return pattern.match(block) is not None
 
 def is_code_block(block):
     pass
