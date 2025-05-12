@@ -184,6 +184,18 @@ This is the same paragraph on a new line
 
         self.assertEqual(is_header_block('#'*7 + ' ' + nonce_str_multiline), False)
 
-
+def test_block_to_block_type(self):
+    blocks = ["## Hey you",
+              "```listen up```",
+              ">F\n>U\n>C\n>K",
+              "- cops\n- judges\n- prison guards",
+              "1. Because\n2. They\n3. Suck"]
+    
+    self.assertEqual(is_header_block(blocks[0]), True)
+    self.assertEqual(is_code_block(blocks[1]), True)
+    self.assertEqual(is_quote_block(blocks[2]), True)
+    self.assertEqual(is_unordered_list_block)(blocks[3]), True
+    self.assertEqual(is_ordered_list_block(blocks[4]), True)
+                   
 if __name__ == "__main__":
     unittest.main()

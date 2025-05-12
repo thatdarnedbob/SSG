@@ -12,6 +12,14 @@ class BlockType(Enum):
 def block_to_block_type(block):
     if is_header_block(block):
         return BlockType.HEADING
+    if is_code_block(block):
+        return BlockType.CODE
+    if is_quote_block(block):
+        return BlockType.QUOTE
+    if is_unordered_list_block(block):
+        return BlockType.UNORDERED_LIST
+    if is_ordered_list_block(block):
+        return BlockType.ORDERED_LIST
     else:
         return BlockType.PARAGRAPH
 
