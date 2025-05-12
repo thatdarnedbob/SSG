@@ -34,7 +34,24 @@ def is_quote_block(block):
     return default_val
 
 def is_unordered_list_block(block):
-    pass
+    pattern = re.compile("- .*")
+    individual_lines = block.splitlines()
+    default_val = True
+    if len(individual_lines) == 0:
+        return False
+    for line in individual_lines:
+        default_val = default_val and pattern.match(line) is not None
+    return default_val
 
 def is_ordered_list_block(block):
-    pass
+    individual_lines = block.splitlines()
+    lines_number = len(individual_lines)
+    default_val = True
+    if len(individual_lines) == 0:
+        return False
+    
+    for i in range(lines_number):
+        pattern = re.compile(f"{i+1}\. .*")
+        default_val = default_val and pattern.match(individual_lines[i]) is not None
+
+    return default_val
