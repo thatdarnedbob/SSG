@@ -74,6 +74,22 @@ This is the same paragraph on a new line
             ],
         )
 
+    def test_is_code_block(self):
+        nonce_str = "hey you"
+        nonce_str_multiline = "   boogedie\ndooooo"
+        good_nonced_headers = []
+        good_nonced_headers_multiline = []
+        bad_nonced_headers = []
+
+        good_nonced_headers.append('```' + nonce_str + '```')
+        good_nonced_headers_multiline.append('```' + nonce_str_multiline + '```')
+
+        bad_nonced_headers.append('```' + nonce_str + '``')
+
+        self.assertEqual(is_code_block(good_nonced_headers[-1]), True)
+        self.assertEqual(is_code_block(good_nonced_headers_multiline[-1]), True)
+        self.assertEqual(is_code_block(bad_nonced_headers[-1]), False)
+
     def test_is_header_block(self):
         nonce_str = "hey you"
         nonce_str_multiline = "   boogedie\ndooooo"

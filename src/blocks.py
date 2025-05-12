@@ -10,14 +10,18 @@ class BlockType(Enum):
     ORDERED_LIST = "ordered list"
 
 def block_to_block_type(block):
-    pass
+    if is_header_block(block):
+        return BlockType.HEADING
+    else:
+        return BlockType.PARAGRAPH
 
 def is_header_block(block):
     pattern = re.compile("#{1,6} .*", flags=re.DOTALL)
     return pattern.match(block) is not None
 
 def is_code_block(block):
-    pass
+    pattern = re.compile("```.*```", flags=re.DOTALL)
+    return pattern.match(block) is not None
 
 def is_quote_block(block):
     pass
