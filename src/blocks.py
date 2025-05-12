@@ -24,7 +24,14 @@ def is_code_block(block):
     return pattern.match(block) is not None
 
 def is_quote_block(block):
-    pass
+    pattern = re.compile(">.*")
+    individual_lines = block.splitlines()
+    default_val = True
+    if len(individual_lines) == 0:
+        return False
+    for line in individual_lines:
+        default_val = default_val and pattern.match(line) is not None
+    return default_val
 
 def is_unordered_list_block(block):
     pass

@@ -90,6 +90,29 @@ This is the same paragraph on a new line
         self.assertEqual(is_code_block(good_nonced_headers_multiline[-1]), True)
         self.assertEqual(is_code_block(bad_nonced_headers[-1]), False)
 
+    def test_is_quote_block(self):
+        nonce_strs_1 = ["hey you\n",
+                        "you might be thinking\n",
+                        "this is just a unit test\n",
+                        "but it ain't\n"]
+        nonce_strs_2 = ["not a single\n",
+                        "line of code\n",
+                        "can eat a cherry\n"]
+        good_nonced_block = ''
+        bad_nonced_block = ''
+
+        for nonce in nonce_strs_1:
+            good_nonced_block = good_nonced_block + ">" + nonce
+        for nonce in nonce_strs_2:
+            bad_nonced_block = bad_nonced_block + ">" + nonce
+        bad_nonced_block += " >... unless?"
+
+        self.assertEqual(is_quote_block(good_nonced_block), True)
+        self.assertEqual(is_quote_block(bad_nonced_block), False)
+        
+        good_nonced_block += "never again, ya know?"
+        self.assertEqual(is_quote_block(good_nonced_block), False)
+
     def test_is_header_block(self):
         nonce_str = "hey you"
         nonce_str_multiline = "   boogedie\ndooooo"
