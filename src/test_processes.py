@@ -320,17 +320,15 @@ This is another paragraph with _italic_ text and `code` here
         node = markdown_to_html_node(md)
         html = node.to_html()
 
-        self.assertEqual(html, '''<div><code><pre>have you ever
-never benn</pre></code></div>''')
+        self.assertEqual(html, '''<div><pre><code>have you ever
+never benn</code></pre></div>''')
         
     def test_quote_block(self):
         md = "> eenie _meenie_ \n>minie **mo**\n>if he hollas let him know"
         node = markdown_to_html_node(md)
         html = node.to_html()
 
-        self.assertEqual(html, '''<div><blockquote>eenie <i>meenie</i>
-minie <b>mo</b>
-if he hollas let him know</blockquote></div>''')
+        self.assertEqual(html, '''<div><blockquote>eenie <i>meenie</i> minie <b>mo</b> if he hollas let him know</blockquote></div>''')
 
 if __name__ == "__main__":
     unittest.main()

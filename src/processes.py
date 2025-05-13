@@ -134,10 +134,10 @@ def get_heading_tag(prefix):
     return 'h' + str(len(prefix))
 
 def handle_code(block):
-    code_block = block.removeprefix('```').removesuffix('```')
+    code_block = block.removeprefix('```').removesuffix('```').lstrip()
     code_leaf = LeafNode(tag=None, value=code_block)
-    pre_parent = ParentNode('pre', children=[code_leaf])
-    code_parent = ParentNode('code', children=[pre_parent])
+    pre_parent = ParentNode('code', children=[code_leaf])
+    code_parent = ParentNode('pre', children=[pre_parent])
 
     return code_parent
 
@@ -147,7 +147,7 @@ def handle_quote(block):
     lines_fixed = []
     for line in working_lines:
         lines_fixed.append(line.removeprefix('>').strip())
-    lines_fixed = '\n'.join(lines_fixed)
+    lines_fixed = ' '.join(lines_fixed)
     working_text_nodes = text_to_text_nodes(lines_fixed)
 
     for node in working_text_nodes:
