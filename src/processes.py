@@ -137,7 +137,19 @@ def handle_unordered_list(block):
     return unordered_list_parent
 
 def handle_ordered_list(block):
-    pass
+    ordered_list_parent = ParentNode('ol', children=[])
+    individual_lines = block.splitlines()
+    for line in individual_lines:
+        fixed_line = strip_leading_ol_format(line)
+        working_text_nodes = text_to_text_nodes(fixed_line)
+        in_line_parent = ParentNode('li', children=[])
+        for node in working_text_nodes:
+            in_line_parent.children.append(text_node_to_html_node(node))
+        ordered_list_parent.children.append(in_line_parent)
+    return ordered_list_parent
+
+def strip_leading_ol_format(line):
+    return line.split(' ', 1)[1]
 
 def handle_paragraph(block):
     paragraph_parent = ParentNode('p', children=[])

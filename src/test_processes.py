@@ -300,6 +300,13 @@ This is another paragraph with _italic_ text and `code` here
         html = node.to_html()
 
         self.assertEqual(html, "<div><ul><li>The First Item</li><li>another item</li><li>They are not in <i>any</i> order!</li></ul></div>")
-    
+
+    def test_unordered_list(self):
+        md = "1. The First Item\n2. The second item\n3. They are _absolutely_ in an order!"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        
+        self.assertEqual(html, "<div><ol><li>The First Item</li><li>The second item</li><li>They are <i>absolutely</i> in an order!</li></ol></div>")
+
 if __name__ == "__main__":
     unittest.main()
