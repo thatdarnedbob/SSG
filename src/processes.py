@@ -142,7 +142,18 @@ def handle_code(block):
     return code_parent
 
 def handle_quote(block):
-    pass
+    quote_parent = ParentNode('blockquote', children=[])
+    working_lines = block.splitlines()
+    lines_fixed = []
+    for line in working_lines:
+        lines_fixed.append(line.removeprefix('>').strip())
+    lines_fixed = '\n'.join(lines_fixed)
+    working_text_nodes = text_to_text_nodes(lines_fixed)
+
+    for node in working_text_nodes:
+        quote_parent.children.append(text_node_to_html_node(node))
+
+    return quote_parent
 
 def handle_unordered_list(block):
     unordered_list_parent = ParentNode('ul', children=[])
