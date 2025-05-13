@@ -59,7 +59,7 @@ def is_ordered_list_block(block):
         return False
     
     for i in range(lines_number):
-        pattern = re.compile(f"{i+1}\. .*")
+        pattern = re.compile(f"{i+1}"+r"."+" .*")
         default_val = default_val and pattern.match(individual_lines[i]) is not None
 
     return default_val

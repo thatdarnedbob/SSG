@@ -1,5 +1,6 @@
 from textnode import *
 from htmlnode import *
+from blocks import *
 import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -36,6 +37,7 @@ def split_nodes_image(old_nodes):
         found_images = extract_markdown_images(workingtext)
         if len(found_images) == 0:
             text_nodes.append(node)
+            workingtext = ""
         for image in found_images:
             parts = workingtext.split("![" + image[0] + "](" + image[1] + ")", maxsplit=1)
             if len(parts[0]) > 0:
@@ -95,3 +97,47 @@ def markdown_to_blocks(md):
             formatted_blocks.append(block)
 
     return formatted_blocks
+
+def markdown_to_html_node(markdown):
+    working_md = markdown_to_blocks(markdown)
+    top_level_parent_node = ParentNode("div", children=[])
+    for block in working_md:
+        match block_to_block_type(block):
+            case BlockType.HEADING:
+                top_level_parent_node.children.append(handle_heading(block))
+            case BlockType.CODE:
+                top_level_parent_node.children.append(handle_code(block))
+            case BlockType.QUOTE:
+                top_level_parent_node.children.append(handle_quote(block))
+            case BlockType.UNORDERED_LIST:
+                top_level_parent_node.children.append(handle_unordered_list(block))
+            case BlockType.ORDERED_LIST:
+                top_level_parent_node.children.append(handle_ordered_list(block))
+            case BlockType.PARAGRAPH:
+                top_level_parent_node.children.append(handle_paragraph(block))
+
+    return top_level_parent_node
+
+def handle_heading(block):
+    pass
+def handle_code(block):
+    pass
+def handle_quote(block):
+    pass
+def handle_unordered_list(block):
+    pass
+def handle_ordered_list(block):
+    pass
+def handle_paragraph(block):
+    paragraph_parent = ParentNode('p', children=[])
+    lines_fixed = ' '.join(block.splitlines())
+    working_text_nodes = text_to_text_nodes(lines_fixed)
+    # print("printing block\n")
+    # print(block)
+    # print("printing working_text_nodes\n")
+    # print(working_text_nodes)
+    # print("\nThat was an attempt\n")
+    for node in working_text_nodes:
+        paragraph_parent.children.append(text_node_to_html_node(node))
+
+    return paragraph_parent
