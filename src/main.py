@@ -26,7 +26,7 @@ def move_dirs(src, dest, log):
     os.mkdir(dest)
 
     src_dir = os.listdir(src)
-    print(src_dir)
+    
     for path in src_dir:
         parsed_path = os.path.join(src, path)
         new_path = os.path.join(dest, path)
