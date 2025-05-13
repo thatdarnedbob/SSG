@@ -308,5 +308,12 @@ This is another paragraph with _italic_ text and `code` here
         
         self.assertEqual(html, "<div><ol><li>The First Item</li><li>The second item</li><li>They are <i>absolutely</i> in an order!</li></ol></div>")
 
+    def test_headings(self):
+        md = "#### in for a world of **shite**"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        
+        self.assertEqual(html, "<div><h4>in for a world of <b>shite</b></h4></div>")
+
 if __name__ == "__main__":
     unittest.main()

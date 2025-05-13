@@ -119,7 +119,20 @@ def markdown_to_html_node(markdown):
     return top_level_parent_node
 
 def handle_heading(block):
-    pass
+    split_block = block.split(' ', 1)
+    heading_tag = get_heading_tag(split_block[0])
+    heading_parent = ParentNode(heading_tag, children=[])
+    lines_fixed = ' '.join(split_block[1].splitlines())
+    working_text_nodes = text_to_text_nodes(lines_fixed)
+
+    for node in working_text_nodes:
+        heading_parent.children.append(text_node_to_html_node(node))
+
+    return heading_parent
+
+def get_heading_tag(prefix):
+    return 'h' + str(len(prefix))
+
 def handle_code(block):
     pass
 def handle_quote(block):
