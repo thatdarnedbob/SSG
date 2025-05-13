@@ -315,5 +315,13 @@ This is another paragraph with _italic_ text and `code` here
         
         self.assertEqual(html, "<div><h4>in for a world of <b>shite</b></h4></div>")
 
+    def test_code_block(self):
+        md = "```have you ever\nnever benn```"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+
+        self.assertEqual(html, '''<div><code><pre>have you ever
+never benn</pre></code></div>''')
+
 if __name__ == "__main__":
     unittest.main()

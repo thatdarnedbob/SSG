@@ -134,9 +134,16 @@ def get_heading_tag(prefix):
     return 'h' + str(len(prefix))
 
 def handle_code(block):
-    pass
+    code_block = block.removeprefix('```').removesuffix('```')
+    code_leaf = LeafNode(tag=None, value=code_block)
+    pre_parent = ParentNode('pre', children=[code_leaf])
+    code_parent = ParentNode('code', children=[pre_parent])
+
+    return code_parent
+
 def handle_quote(block):
     pass
+
 def handle_unordered_list(block):
     unordered_list_parent = ParentNode('ul', children=[])
     individual_lines = block.splitlines()
