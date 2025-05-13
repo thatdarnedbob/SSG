@@ -289,12 +289,17 @@ This is another paragraph with _italic_ text and `code` here
 
         node = markdown_to_html_node(md)
         html = node.to_html()
-        # print("printing HTML")
-        # print(html)
         self.assertEqual(
             html,
             "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
     )
+        
+    def test_unordered_list(self):
+        md = "- The First Item\n- another item\n- They are not in _any_ order!"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+
+        self.assertEqual(html, "<div><ul><li>The First Item</li><li>another item</li><li>They are not in <i>any</i> order!</li></ul></div>")
     
 if __name__ == "__main__":
     unittest.main()

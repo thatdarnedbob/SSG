@@ -125,18 +125,25 @@ def handle_code(block):
 def handle_quote(block):
     pass
 def handle_unordered_list(block):
-    pass
+    unordered_list_parent = ParentNode('ul', children=[])
+    individual_lines = block.splitlines()
+    for line in individual_lines:
+        fixed_line = line.removeprefix('- ')
+        working_text_nodes = text_to_text_nodes(fixed_line)
+        in_line_parent = ParentNode('li', children=[])
+        for node in working_text_nodes:
+            in_line_parent.children.append(text_node_to_html_node(node))
+        unordered_list_parent.children.append(in_line_parent)
+    return unordered_list_parent
+
 def handle_ordered_list(block):
     pass
+
 def handle_paragraph(block):
     paragraph_parent = ParentNode('p', children=[])
     lines_fixed = ' '.join(block.splitlines())
     working_text_nodes = text_to_text_nodes(lines_fixed)
-    # print("printing block\n")
-    # print(block)
-    # print("printing working_text_nodes\n")
-    # print(working_text_nodes)
-    # print("\nThat was an attempt\n")
+
     for node in working_text_nodes:
         paragraph_parent.children.append(text_node_to_html_node(node))
 
