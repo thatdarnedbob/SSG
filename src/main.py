@@ -2,6 +2,7 @@ from textnode import TextNode
 import os
 # from os import path, listdir, mkdir
 import shutil
+from time import strftime
 
 def main():
     
@@ -32,11 +33,17 @@ def move_dirs(src, dest, log):
         new_path = os.path.join(dest, path)
         if os.path.isfile(parsed_path):
             shutil.copy(parsed_path, new_path)
+            file_log(parsed_path, new_path, log)
         elif os.path.isdir(parsed_path):
             try:
                 os.mkdir(new_path)
             except FileExistsError:
                 pass
             move_dirs(parsed_path, new_path, log)
+
+def file_log(src, dest, log):
+    with open(os.path.join(log, "log.txt"), mode='a') as f:
+        the_time = strftime("%H:%M:%S, %a %b %d")
+        print(f"Copying {src} to {dest}. {the_time}", file=f)
 
 main()
