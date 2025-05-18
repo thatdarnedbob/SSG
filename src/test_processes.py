@@ -330,5 +330,12 @@ never benn</code></pre></div>''')
 
         self.assertEqual(html, '''<div><blockquote>eenie <i>meenie</i> minie <b>mo</b> if he hollas let him know</blockquote></div>''')
 
+    def test_extract_header(self):
+        md = "# This should be the title\nAnd this should not"
+        title = extract_title(md)
+        
+        self.assertEqual(title, "This should be the title")
+        with self.assertRaises(Exception):
+            extract_title("This should be an exception")
 if __name__ == "__main__":
     unittest.main()

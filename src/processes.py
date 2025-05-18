@@ -191,3 +191,10 @@ def handle_paragraph(block):
         paragraph_parent.children.append(text_node_to_html_node(node))
 
     return paragraph_parent
+
+def extract_title(markdown):
+    candidate_header = markdown.splitlines()[0]
+    if candidate_header.startswith("# "):
+        return candidate_header.removeprefix("# ")
+    else:
+        raise Exception("no header line in markdown file!")

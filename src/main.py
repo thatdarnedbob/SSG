@@ -6,8 +6,8 @@ from time import strftime
 
 def main():
     
-    move_dirs("static", "public", "logs")
-    
+    # move_dirs("static", "public", "logs")
+    generate_page("content/index.md", "src/template.html", None)
     return
 
 def move_dirs(src, dest, log):
@@ -45,5 +45,11 @@ def file_log(src, dest, log):
     with open(os.path.join(log, "log.txt"), mode='a') as f:
         the_time = strftime("%H:%M:%S, %a %b %d")
         print(f"Copying {src} to {dest}. {the_time}", file=f)
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating a page from {from_path}, using {template_path} as a template, to {dest_path}.")
+
+    src_text = open(from_path,'r').read()
+    template_text= open(template_path, 'r').read()
 
 main()
