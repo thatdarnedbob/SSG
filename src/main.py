@@ -7,8 +7,8 @@ from time import strftime
 
 def main():
     
-    # move_dirs("static", "public", "logs")
-    generate_page("content/index.md", "src/template.html", None)
+    move_dirs("static", "public", "logs")
+    generate_page("content/index.md", "src/template.html", "public/index.html", "logs")
     return
 
 def move_dirs(src, dest, log):
@@ -47,15 +47,26 @@ def file_log(src, dest, log):
         the_time = strftime("%H:%M:%S, %a %b %d")
         print(f"Copying {src} to {dest}. {the_time}", file=f)
 
-def generate_page(from_path, template_path, dest_path):
-    print(f"Generating a page from {from_path}, using {template_path} as a template, to {dest_path}.")
+def template_log(src, template, dest, log):
+    with open(os.path.join(log, "log.txt"), mode='a') as f:
+        the_time = strftime("%H:%M:%S, %a %b %d")
+        print(f"Generating page from {src}, storing in {dest}. Using {template} as template. {the_time}", file=f)
 
-    src_text = open(from_path,'r').read()
+def generate_page(from_path, template_path, dest_path, log):
+    template_log(from_path, template_path, dest_path, log)
+
+    src_text = open(from_path, 'r').read()
     template_text= open(template_path, 'r').read()
 
     read_html = markdown_to_html_node(src_text).to_html()
-    title_will_be = extract_title(src_text)
+    read_title = extract_title(src_text)
 
-    print(title_will_be)
-    print(read_html)
+    template_title_target = "{{ Title }}"
+    template_html_target = "{{ Content }}"
+
+    generated_page = template_text.replace(template_title_target, read_title).replace(template_html_target, read_html)
+    dest_file = open(dest_path, 'w')
+    dest_file.write(generated_page)
+    dest_file.close()
+
 main()
