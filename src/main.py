@@ -1,4 +1,5 @@
 from textnode import TextNode
+from processes import *
 import os
 # from os import path, listdir, mkdir
 import shutil
@@ -52,4 +53,9 @@ def generate_page(from_path, template_path, dest_path):
     src_text = open(from_path,'r').read()
     template_text= open(template_path, 'r').read()
 
+    read_html = markdown_to_html_node(src_text).to_html()
+    title_will_be = extract_title(src_text)
+
+    print(title_will_be)
+    print(read_html)
 main()
