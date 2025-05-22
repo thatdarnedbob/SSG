@@ -1,28 +1,29 @@
 from textnode import TextNode
 from processes import *
 import os
-# from os import path, listdir, mkdir
 import shutil
+import sys
 from time import strftime
 
 content = "content"
 template_path = "src/template.html"
-destination = "public"
+destination = "docs"
 logs = "logs"
+static = "static"
 
 def main():
-    
-    move_dirs("static", "public", "logs")
-    # generate_page("content/index.md", "src/template.html", "public/index.html", "logs")
-    generate_pages_recursive(content, template_path, destination, logs)
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    else:
+        basepath = "/"
+    move_dirs(static, destination, logs)
+    generate_pages_recursive(content, template_path, destination, logs, basepath)
 
 def move_dirs(src, dest, log):
     if src is None or dest is None or log is None:
         raise Exception("need all arguments")
     if not (os.path.exists(src)):
         raise Exception("source path does not exist")
-    # if not (os.path.exists(dest)):
-    #   raise Exception("destination path does not exist")
     if not (os.path.exists(log)):
         raise Exception("logs path does not exist")
     
@@ -57,7 +58,7 @@ def template_log(src, template, dest, log):
         the_time = strftime("%H:%M:%S, %a %b %d")
         print(f"Generating page from {src}, storing in {dest}. Using {template} as template. {the_time}", file=f)
 
-def generate_page(from_path, template_path, dest_path, log):
+def generate_page(from_path, template_path, dest_path, log, basepath):
     template_log(from_path, template_path, dest_path, log)
 
     src_text = open(from_path, 'r').read()
@@ -69,12 +70,16 @@ def generate_page(from_path, template_path, dest_path, log):
     template_title_target = "{{ Title }}"
     template_html_target = "{{ Content }}"
 
-    generated_page = template_text.replace(template_title_target, read_title).replace(template_html_target, read_html)
+    generated_page = template_text.replace(template_title_target, read_title)
+    generated_page = generated_page.replace(template_html_target, read_html)
+    generated_page = generated_page.replace("href=\"/", f"href=\"{basepath}")
+    generated_page = generated_page.replace("src=\"/", f"src=\"{basepath}")
+
     dest_file = open(dest_path, 'w')
     dest_file.write(generated_page)
     dest_file.close()
 
-def generate_pages_recursive(dir_path_content, path_template, dir_path_dest, path_logs):
+def generate_pages_recursive(dir_path_content, path_template, dir_path_dest, path_logs, basepath):
     if dir_path_content is None or path_template is None or dir_path_dest is None or logs is None:
         raise Exception("need all arguments")
     if not (os.path.exists(dir_path_content)):
@@ -84,22 +89,20 @@ def generate_pages_recursive(dir_path_content, path_template, dir_path_dest, pat
     
 
     src_dir = os.listdir(dir_path_content)
-    print(src_dir)
 
     for path in src_dir:
         parsed_path = os.path.join(dir_path_content, path)
-        print(parsed_path)
         new_path = os.path.join(dir_path_dest, path)
         if os.path.isfile(parsed_path):
             if parsed_path.endswith(".md"):
                 new_path = new_path.removesuffix(".md") + ".html"
-                generate_page(parsed_path, template_path, new_path, logs)
+                generate_page(parsed_path, template_path, new_path, logs, basepath)
         elif os.path.isdir(parsed_path):
             try:
                 os.mkdir(new_path)
             except FileExistsError:
                 pass
-            generate_pages_recursive(parsed_path, path_template, new_path, path_logs)
+            generate_pages_recursive(parsed_path, path_template, new_path, path_logs, basepath)
     
 
 
