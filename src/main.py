@@ -5,11 +5,16 @@ import os
 import shutil
 from time import strftime
 
+content = "content"
+template_path = "src/template.html"
+destination = "public"
+logs = "logs"
+
 def main():
     
     move_dirs("static", "public", "logs")
-    generate_page("content/index.md", "src/template.html", "public/index.html", "logs")
-    return
+    # generate_page("content/index.md", "src/template.html", "public/index.html", "logs")
+    generate_pages_recursive(content, template_path, destination, logs)
 
 def move_dirs(src, dest, log):
     if src is None or dest is None or log is None:
@@ -68,5 +73,34 @@ def generate_page(from_path, template_path, dest_path, log):
     dest_file = open(dest_path, 'w')
     dest_file.write(generated_page)
     dest_file.close()
+
+def generate_pages_recursive(dir_path_content, path_template, dir_path_dest, path_logs):
+    if dir_path_content is None or path_template is None or dir_path_dest is None or logs is None:
+        raise Exception("need all arguments")
+    if not (os.path.exists(dir_path_content)):
+        raise Exception("source path does not exist")
+    if not (os.path.exists(path_template)):
+        raise Exception("template path does not exist")
+    
+
+    src_dir = os.listdir(dir_path_content)
+    print(src_dir)
+
+    for path in src_dir:
+        parsed_path = os.path.join(dir_path_content, path)
+        print(parsed_path)
+        new_path = os.path.join(dir_path_dest, path)
+        if os.path.isfile(parsed_path):
+            if parsed_path.endswith(".md"):
+                new_path = new_path.removesuffix(".md") + ".html"
+                generate_page(parsed_path, template_path, new_path, logs)
+        elif os.path.isdir(parsed_path):
+            try:
+                os.mkdir(new_path)
+            except FileExistsError:
+                pass
+            generate_pages_recursive(parsed_path, path_template, new_path, path_logs)
+    
+
 
 main()
