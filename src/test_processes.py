@@ -337,5 +337,7 @@ never benn</code></pre></div>''')
         self.assertEqual(title, "This should be the title")
         with self.assertRaises(Exception):
             extract_title("This should be an exception")
+    
+    
 if __name__ == "__main__":
     unittest.main()
